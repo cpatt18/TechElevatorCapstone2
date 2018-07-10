@@ -7,9 +7,8 @@ public interface ReservationDAO
 {
 	public List<Reservation> getAllReservations();
 	public Reservation getReservationsById(long resId);
-	public List<SiteWithFee> getSitesByToFromDate(long campgroundId, LocalDate fromDate, LocalDate toDate); //Changed name and arguments
-//	public boolean setReservation(long campgroundId, LocalDate fromDate, LocalDate toDate);
-	public Reservation createReservation(Reservation newReservation);//made
-	public void saveReservation(Reservation savedReservation);//made
+	public List<SiteWithFee> getSitesByToFromDate(long campgroundId, LocalDate fromDate, LocalDate toDate);
+	public Reservation createReservation(Reservation newReservation);
+	public void saveReservation(Reservation savedReservation);
 
 }

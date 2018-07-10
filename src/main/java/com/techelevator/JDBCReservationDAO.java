@@ -42,48 +42,6 @@ public class JDBCReservationDAO implements ReservationDAO {
 		}
 		return searchById;
 	}
-//	@Override
-//	public boolean setReservation(long campgroundId, LocalDate fromDate, LocalDate toDate) {    // method in progress
-//		Scanner input = new Scanner(System.in);
-//		System.out.println("Which site should be reserved? (enter 0 to cancel)");
-//		int userChoice = input.nextInt();
-//		input.nextLine();
-//		
-//		if (userChoice == 0) {
-//			input.close();
-//			return false;
-//		}
-//		
-//		System.out.println("What name should the reservation be made under?");
-//		String userName = input.nextLine();
-//		
-//		String sqlSiteId = "SELECT site_id FROM site " +
-//							"JOIN campground ON campground.campground_id = site.campground_id " +
-//							"WHERE site.campground_id = ? AND site_number = ? ";
-//		SqlRowSet result = jdbcTemplate.queryForRowSet(sqlSiteId, campgroundId, userChoice);
-//		
-//		int id = 0;
-//		while (result.next()) {
-//			id = result.getInt("site_id");
-//		}
-//		
-//		String sql = 	"INSERT INTO reservation (site_id, name, from_date, to_date) " +
-//						"VALUES (?, ?, ?, ?); ";
-//		jdbcTemplate.update(sql, id, userName, fromDate, toDate);
-//		
-//		String sqlResId = "SELECT reservation_id FROM reservation " +
-//							"WHERE site_id = ? AND name = ? AND from_date = ? ";
-//		SqlRowSet resIdResult = jdbcTemplate.queryForRowSet(sqlResId, id, userName, toDate);
-//		
-//		int reservationId = 0; // hard coded, not sure how to say reservations.length + 1
-//		while (resIdResult.next()) {
-//			reservationId = resIdResult.getInt("reservation_id");
-//		}
-//		
-//		System.out.println("The reservation has been made and the confirmation id is " + reservationId + "\n\n");
-//		input.close();
-//		return true;
-//	}
 	
 	@Override
 	public Reservation getReservationsById(long resId) 
@@ -100,7 +58,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 		return reservations;
 	}
 	
-	@Override//Added
+	@Override
 	public Reservation createReservation(Reservation newReservation) 
 	{
 		String sqlInsertDepartment = "insert into reservation(site_id, name, to_date, from_date, create_date)" +
@@ -114,7 +72,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 		return newReservation;
 	}
 	
-	@Override//Added
+	@Override
 	public void saveReservation(Reservation savedReservation) 
 	{
 		String sqlSavedReservation = "update reservation set name = ? where reservation_id = ?";
@@ -145,7 +103,7 @@ public class JDBCReservationDAO implements ReservationDAO {
 		
 		return sites;
 	}
-	//Added
+
 	public long getNextReservationId()
 	{
 		SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("select nextval('reservation_reservation_id_seq')");

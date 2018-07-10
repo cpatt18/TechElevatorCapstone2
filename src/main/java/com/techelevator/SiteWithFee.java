@@ -92,7 +92,7 @@ public class SiteWithFee
 	}
 
 	@Override
-	public String toString() //Changed format
+	public String toString()
 	{
 		String accessible = isAccessible ? "Yes" : "No";
 		String utilities = hasUtilities ? "Yes" : "N/A";

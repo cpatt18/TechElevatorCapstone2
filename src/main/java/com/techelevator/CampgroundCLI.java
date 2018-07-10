@@ -79,63 +79,57 @@ public class CampgroundCLI {
 		else if(choice.equals(SUB_MENU_OPTION_SEARCH_RESERVATIONS)) {
 			printHeading("Search for a Campground Reservation");
 			handleViewCampgrounds(park);
-			String userCampChoice = getUserInput("\nWhich campground (enter 0 to cancel)? ");
-			long result = Long.parseLong(userCampChoice);
-			if (result == 0)
-			{
-				return;
-			}
-
-			LocalDate arrivalDate = getDateInput("What is the arrival date? (MM/DD/YYYY) ");
-			LocalDate departureDate = getDateInput("What is the departure date? (MM/DD/YYYY) ");
-			long diff = ChronoUnit.DAYS.between(arrivalDate, departureDate);
-			if (diff < 1)
-			{
-				System.out.println("Please select another time range");
-			}
-			else
-			{
-				printHeading("Results Matching Your Search Criteria");
-				printHeading("Site No.    Max Occup.    Accessible?    Max RV Length    Utility?    Cost");
-				List<SiteWithFee> sites = reservationDAO.getSitesByToFromDate(result, arrivalDate, departureDate);
-				if (sites.size() == 0)
-				{
-					System.out.println("Unvaliable sites for that date range. Please try again.");
-					return; // might not need this
-				}
-				else
-				{
-					for (SiteWithFee st : sites)
-					{
-						System.out.println(st.toString() + diff * st.getDailyFee());
-					}
-
-					userCampChoice = getUserInput("Which site should be reserved (enter 0 to cancel)? ");//Added this and the below if statement to return to main menu if the user chooses 0
-					if (result == 0)
-					{
-						return;
-					}
-					//Added this
-					handleAddReservation(result, arrivalDate, departureDate, LocalDate.now());
-
-					//	try {
-					//	reservationDAO.setReservation(result, arrivalDate, departureDate);
-					//	return;
-					//	} catch (Exception e) {
-					//	e.printStackTrace();
-					//	}
-
-					//Not Sure what this is for??
-					//	reservationDAO.setReservation(result, arrivalDate, departureDate);
-					//	return;
-				}
-			}
-		} 
+			handleMakeReservation();
+		}
 		else if(choice.equals(SUB_MENU_OPTION_RETURN_TO_MAIN)) {
 			return;
 		}
 	}
-	//  Made this method to create and save a method in the table
+
+	private void handleMakeReservation()
+	{
+		String userCampChoice = getUserInput("\nWhich campground (enter 0 to cancel)? ");
+		long result = Long.parseLong(userCampChoice);
+		if (result == 0)
+		{
+			return;
+		}
+
+		LocalDate arrivalDate = getDateInput("What is the arrival date? (MM/DD/YYYY) ");
+		LocalDate departureDate = getDateInput("What is the departure date? (MM/DD/YYYY) ");
+		long diff = ChronoUnit.DAYS.between(arrivalDate, departureDate);
+		if (diff < 1)
+		{
+			System.out.println("Please select another time range");
+		}
+		else
+		{
+			printHeading("Results Matching Your Search Criteria");
+			printHeading("Site No.    Max Occup.    Accessible?    Max RV Length    Utility?    Cost");
+			List<SiteWithFee> sites = reservationDAO.getSitesByToFromDate(result, arrivalDate, departureDate);
+			if (sites.size() == 0)
+			{
+				System.out.println("Unvaliable sites for that date range. Please try again.");
+				return;
+			}
+			else
+			{
+				for (SiteWithFee st : sites)
+				{
+					System.out.println(st.toString() + diff * st.getDailyFee());
+				}
+
+				userCampChoice = getUserInput("Which site should be reserved (enter 0 to cancel)? ");
+				result = Long.parseLong(userCampChoice);
+				if (result == 0)
+				{
+					return;
+				}
+				handleAddReservation(result, arrivalDate, departureDate, LocalDate.now());
+			}
+		}
+	}
+
 	private void handleAddReservation(long site_id, LocalDate fromDate, LocalDate toDate, LocalDate createDate ) {
 		String newReservationName = getUserInput("What name should the reservation be made under? ");
 		Reservation newReservation = new Reservation();
@@ -158,7 +152,7 @@ public class CampgroundCLI {
 		}
 	}
 
-	private String getUserInput(String prompt) { //Changed to make sure user doesn't leave prompt blank
+	private String getUserInput(String prompt) { 
 		String userInput = "";
 		Scanner kb = new Scanner(System.in);
 		while (userInput.isEmpty())
@@ -169,7 +163,7 @@ public class CampgroundCLI {
 		return userInput;
 	}
 
-	private LocalDate getDateInput(String prompt)//Made this to convert the month number given from the table to the month name in the menu
+	private LocalDate getDateInput(String prompt)
 	{
 		LocalDate userDate = null;
 		DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("M/d/yyyy");
